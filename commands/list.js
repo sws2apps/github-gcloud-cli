@@ -60,7 +60,7 @@ export const setupWIF = async () => {
 		if (accountExist) {
 			console.log(
 				chalk.yellow(
-					`GitHub Service Account already exists! If necessary, grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page(https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
+					`GitHub Service Account already exists! If necessary, grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
 				)
 			);
 		}
@@ -73,7 +73,7 @@ export const setupWIF = async () => {
 
 			console.log(
 				chalk.green(
-					`GitHub Service Account created successfully! Grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page(https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
+					`GitHub Service Account created successfully! Grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
 				)
 			);
 		}
