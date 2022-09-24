@@ -1,0 +1,6 @@
+test
+*.test.js
+
+.github
+
+release.config.cjs
