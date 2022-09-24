@@ -67,7 +67,7 @@ export const setupWIF = async () => {
 
 		if (!accountExist) {
 			execSync(
-				`gcloud iam service-accounts create "${SERVICE_ACCOUNT}" --name="${serviceAccountName}" --display-name="Keyless authentication for GitHub Action" --project "${PROJECT_ID}"`,
+				`gcloud iam service-accounts create "${serviceAccountName}" --display-name="GitHub Action Account" --description="Keyless authentication for GitHub Action" --project "${PROJECT_ID}"`,
 				{ stdio: [] }
 			);
 
@@ -105,7 +105,7 @@ export const setupWIF = async () => {
 
 		console.log('\nCreating a Workload Identity Pool ...');
 		const poolsList = execSync(
-			`gcloud iam workload-identity-pools list --project="${PROJECT_ID}" --location="global"`
+			`gcloud iam workload-identity-pools list --project="${PROJECT_ID}" --location="global" --show-deleted`
 		);
 		const poolExist = poolsList.toString().includes(POOL_NAME);
 
@@ -133,7 +133,7 @@ export const setupWIF = async () => {
 
 		console.log(`\nCreating a Workload Identity Provider in ${POOL_NAME} ...`);
 		const providersList = execSync(
-			`gcloud iam workload-identity-pools providers list --project="${PROJECT_ID}" --workload-identity-pool="${POOL_NAME}" --location="global"`
+			`gcloud iam workload-identity-pools providers list --project="${PROJECT_ID}" --workload-identity-pool="${POOL_NAME}" --location="global" --show-deleted`
 		);
 		const providerExist = providersList.toString().includes(PROVIDER_NAME);
 
@@ -174,7 +174,7 @@ export const setupWIF = async () => {
 		const roleWorkflow = 'roles/iam.workloadIdentityUser';
 
 		const workloadIdentityUsers =
-			JSON.parse(policiesList.toString()).bindings.find(
+			JSON.parse(policiesList.toString()).bindings?.find(
 				(policy) => policy.role === roleWorkflow
 			).members || [];
 
