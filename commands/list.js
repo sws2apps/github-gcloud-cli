@@ -24,7 +24,7 @@ export const setupWIF = async () => {
 		}
 
 		console.log('\nAuthenticating...');
-		// execSync('gcloud auth login', { stdio: [] });
+		execSync('gcloud auth login', { stdio: [] });
 		console.log(chalk.green('You are now connected to the Google Cloud SDK.'));
 
 		console.log('\n');
