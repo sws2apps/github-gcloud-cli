@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.1.0...v1.2.0) (2022-10-07)
+
+
+### Features
+
+* **cli:** check active account state before authentication attempt ([a95e0df](https://github.com/sws2apps/github-gcloud-cli/commit/a95e0df083bfd5a42d65f2dbac00f0f1730bb94c))
+* **deps:** bump chalk from 5.0.1 to 5.1.0 ([1207e4f](https://github.com/sws2apps/github-gcloud-cli/commit/1207e4f37e828b370294ec367a208daa0885864f))
+
 # [1.1.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.0.1...v1.1.0) (2022-09-30)
 
 
