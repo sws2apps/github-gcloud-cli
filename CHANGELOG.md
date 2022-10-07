@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.0.1...v1.1.0) (2022-09-30)
+
+
+### Features
+
+* **deps:** bump commander from 9.4.0 to 9.4.1 ([a3a21cc](https://github.com/sws2apps/github-gcloud-cli/commit/a3a21ccde10f41d2b65604a9c2d14bedf84f64ac))
+
 ## [1.0.1](https://github.com/sws2apps/github-gcloud-cli/compare/v1.0.0...v1.0.1) (2022-09-24)
 
 
