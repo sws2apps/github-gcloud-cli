@@ -178,7 +178,7 @@ export const setupWIF = async () => {
 			`gcloud iam service-accounts get-iam-policy "${SERVICE_ACCOUNT}" --project="${PROJECT_ID}" --format=json`
 		);
 
-		const userMember = `principalSet://iam.googleapis.com/${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}"`;
+		const userMember = `principalSet://iam.googleapis.com/${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}`;
 		const roleWorkflow = 'roles/iam.workloadIdentityUser';
 
 		const workloadIdentityUsers =
