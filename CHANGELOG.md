@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/sws2apps/github-gcloud-cli/compare/v1.2.0...v1.2.1) (2022-10-07)
+
+
+### Bug Fixes
+
+* **cli:** remove extra quotes in command to check workload identity users ([149fb28](https://github.com/sws2apps/github-gcloud-cli/commit/149fb28a841ea02690862fffa3d423610f90b34d))
+
 # [1.2.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.1.0...v1.2.0) (2022-10-07)
 
 
