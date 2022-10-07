@@ -23,10 +23,18 @@ export const setupWIF = async () => {
 			return;
 		}
 
-		console.log('\nAuthenticating...');
-		execSync('gcloud auth login', { stdio: [] });
-		console.log(chalk.green('You are now connected to the Google Cloud SDK.'));
+		console.log('\nVerifying authentication...');
+		const activeAccount = execSync(
+			`gcloud auth list --filter=status:ACTIVE --format="value(account)"`
+		);
 
+		if (activeAccount.length > 0) {
+			console.log(chalk.blue('You are alreadt connected to the Google Cloud SDK.\n'));
+		} else {
+			execSync('gcloud auth login', { stdio: [] });
+			console.log(chalk.green('You are now connected to the Google Cloud SDK.'));
+		}
+		
 		console.log('\n');
 		const projectId = await input({
 			message:
