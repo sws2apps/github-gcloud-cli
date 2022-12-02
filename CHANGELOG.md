@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.3.0...v1.4.0) (2022-12-02)
+
+
+### Features
+
+* **deps:** bump @inquirer/input from 0.0.27-alpha.0 to 0.0.28-alpha.0 ([c0b509b](https://github.com/sws2apps/github-gcloud-cli/commit/c0b509b1b0359d7645edd1c106be6c65c933e01e))
+* **deps:** bump @semantic-release/changelog from 6.0.1 to 6.0.2 ([7ca6523](https://github.com/sws2apps/github-gcloud-cli/commit/7ca65232bce2c2987c1df1c9944e596a9c4f117e))
+
 # [1.3.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.2.1...v1.3.0) (2022-10-19)
 
 
