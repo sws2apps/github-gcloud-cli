@@ -1,6 +1,6 @@
 {
   "name": "@sws2apps/github-gcloud-cli",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "type": "module",
   "description": "CLI to setup Workload Identity Federation to Google Cloud for GitHub Actions",
   "publishConfig": {
