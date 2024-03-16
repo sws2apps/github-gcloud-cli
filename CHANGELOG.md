@@ -1,3 +1,11 @@
+# [1.19.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.18.0...v1.19.0) (2024-03-16)
+
+
+### Features
+
+* **deps:** bump @inquirer/confirm from 3.0.2 to 3.1.0 ([9ebcc43](https://github.com/sws2apps/github-gcloud-cli/commit/9ebcc430d5666b43c673c94f7156f2ff2fea3138))
+* **deps:** bump @inquirer/input from 2.0.2 to 2.1.0 ([010b53a](https://github.com/sws2apps/github-gcloud-cli/commit/010b53a0548430e10ec3058379a1c1039d16876c))
+
 # [1.18.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.17.0...v1.18.0) (2024-03-11)
 
 
