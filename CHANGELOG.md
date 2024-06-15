@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.21.0...v1.22.0) (2024-06-15)
+
+
+### Features
+
+* **deps:** bump braces from 3.0.2 to 3.0.3 ([745be75](https://github.com/sws2apps/github-gcloud-cli/commit/745be75ec0324b060810e32f6f77256222a838a0))
+
 # [1.21.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.20.0...v1.21.0) (2024-06-03)
 
 
