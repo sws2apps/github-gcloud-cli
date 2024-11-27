@@ -4,220 +4,176 @@ import confirm from '@inquirer/confirm';
 import input from '@inquirer/input';
 
 export const setupWIF = async () => {
-	try {
-		console.log(
-			chalk.green(
-				'\nWelcome to GitHub GCloud CLI\nThis tool will help you to setup the Workload Identity Federation in Google Cloud for GitHub Action\n'
-			)
-		);
+  try {
+    console.log(chalk.green('\nWelcome to GitHub GCloud CLI\nThis tool will help you to setup the Workload Identity Federation in Google Cloud for GitHub Action\n'));
 
-		console.log(
-			chalk.blue(
-				'Before continuing, make sure that the Google Cloud SDK is installed in your workstation (https://cloud.google.com/sdk/docs/install-sdk), and the necessary project exists in the Google Cloud Console (https://console.cloud.google.com).\n'
-			)
-		);
+    console.log(
+      chalk.blue(
+        'Before continuing, make sure that the Google Cloud SDK is installed in your workstation (https://cloud.google.com/sdk/docs/install-sdk), and the necessary project exists in the Google Cloud Console (https://console.cloud.google.com).\n'
+      )
+    );
 
-		const answer = await confirm({ message: 'Are you sure to continue?' });
+    const answer = await confirm({ message: 'Are you sure to continue?' });
 
-		if (!answer) {
-			return;
-		}
+    if (!answer) {
+      return;
+    }
 
-		console.log('\nVerifying authentication...');
-		const activeAccount = execSync(
-			`gcloud auth list --filter=status:ACTIVE --format="value(account)"`
-		);
+    console.log('\nVerifying authentication...');
+    const activeAccount = execSync(`gcloud auth list --filter=status:ACTIVE --format="value(account)"`);
 
-		if (activeAccount.length > 0) {
-			console.log(chalk.blue('You are alreadt connected to the Google Cloud SDK.\n'));
-		} else {
-			execSync('gcloud auth login', { stdio: [] });
-			console.log(chalk.green('You are now connected to the Google Cloud SDK.'));
-		}
-		
-		console.log('\n');
-		const projectId = await input({
-			message:
-				'Enter the ID of the project you want to setup on Google Cloud: ',
-		});
+    if (activeAccount.length > 0) {
+      console.log(chalk.blue('You are alreadt connected to the Google Cloud SDK.\n'));
+    } else {
+      execSync('gcloud auth login', { stdio: [] });
+      console.log(chalk.green('You are now connected to the Google Cloud SDK.'));
+    }
 
-		if (!projectId) {
-			console.log(
-				chalk.red('You did not provide the Project ID which is required')
-			);
-			return;
-		}
+    console.log('\n');
+    const projectId = await input({
+      message: 'Enter the ID of the project you want to setup on Google Cloud: ',
+    });
 
-		const PROJECT_ID = projectId.toLowerCase();
+    if (!projectId) {
+      console.log(chalk.red('You did not provide the Project ID which is required'));
+      return;
+    }
 
-		const serviceAccountName = await input({
-			message:
-				'How do you want to call the Google Cloud Service Account that will be created?',
-			default: 'github-service-account',
-		});
-		const SERVICE_ACCOUNT = `${serviceAccountName}@${PROJECT_ID}.iam.gserviceaccount.com`;
+    const PROJECT_ID = projectId.toLowerCase();
 
-		console.log('\nCreating Google Cloud Service Account ...');
+    const serviceAccountName = await input({
+      message: 'How do you want to call the Google Cloud Service Account that will be created?',
+      default: 'github-service-account',
+    });
+    const SERVICE_ACCOUNT = `${serviceAccountName}@${PROJECT_ID}.iam.gserviceaccount.com`;
 
-		// check if the service account exists
-		const accountsList = execSync(
-			`gcloud iam service-accounts list --project "${PROJECT_ID}"`
-		);
-		const accountExist = accountsList.toString().includes(SERVICE_ACCOUNT);
+    console.log('\nCreating Google Cloud Service Account ...');
 
-		if (accountExist) {
-			console.log(
-				chalk.yellow(
-					`GitHub Service Account already exists! If necessary, grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
-				)
-			);
-		}
+    // check if the service account exists
+    const accountsList = execSync(`gcloud iam service-accounts list --project "${PROJECT_ID}"`);
+    const accountExist = accountsList.toString().includes(SERVICE_ACCOUNT);
 
-		if (!accountExist) {
-			execSync(
-				`gcloud iam service-accounts create "${serviceAccountName}" --display-name="GitHub Action Account" --description="Keyless authentication for GitHub Action" --project "${PROJECT_ID}"`,
-				{ stdio: [] }
-			);
+    if (accountExist) {
+      console.log(
+        chalk.yellow(
+          `GitHub Service Account already exists! If necessary, grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
+        )
+      );
+    }
 
-			console.log(
-				chalk.green(
-					`GitHub Service Account created successfully! Grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
-				)
-			);
-		}
+    if (!accountExist) {
+      execSync(
+        `gcloud iam service-accounts create "${serviceAccountName}" --display-name="GitHub Action Account" --description="Keyless authentication for GitHub Action" --project "${PROJECT_ID}"`,
+        { stdio: [] }
+      );
 
-		const IAM_SERVICE = 'iamcredentials.googleapis.com';
+      console.log(
+        chalk.green(
+          `GitHub Service Account created successfully! Grant the ${SERVICE_ACCOUNT} the necessary permissions to access Google Cloud resources, in the IAM Admin page (https://console.cloud.google.com/iam-admin/iam?project=${PROJECT_ID}). This step varies by use case.`
+        )
+      );
+    }
 
-		console.log('\nEnabling the IAM Credentials API ...');
-		const enabledServicesList = execSync(
-			`gcloud services list --enabled --project "${PROJECT_ID}"`
-		);
+    const IAM_SERVICE = 'iamcredentials.googleapis.com';
 
-		const isServiceEnabled = enabledServicesList
-			.toString()
-			.includes(IAM_SERVICE);
+    console.log('\nEnabling the IAM Credentials API ...');
+    const enabledServicesList = execSync(`gcloud services list --enabled --project "${PROJECT_ID}"`);
 
-		if (isServiceEnabled) {
-			console.log(chalk.yellow(`Service already enabled`));
-		}
+    const isServiceEnabled = enabledServicesList.toString().includes(IAM_SERVICE);
 
-		if (!isServiceEnabled) {
-			execSync(
-				`gcloud services enable ${IAM_SERVICE} --project "${PROJECT_ID}"`,
-				{ stdio: [] }
-			);
-			console.log(chalk.green(`Done!`));
-		}
+    if (isServiceEnabled) {
+      console.log(chalk.yellow(`Service already enabled`));
+    }
 
-		const POOL_NAME = 'github-pool';
+    if (!isServiceEnabled) {
+      execSync(`gcloud services enable ${IAM_SERVICE} --project "${PROJECT_ID}"`, { stdio: [] });
+      console.log(chalk.green(`Done!`));
+    }
 
-		console.log('\nCreating a Workload Identity Pool ...');
-		const poolsList = execSync(
-			`gcloud iam workload-identity-pools list --project="${PROJECT_ID}" --location="global" --show-deleted`
-		);
-		const poolExist = poolsList.toString().includes(POOL_NAME);
+    const POOL_NAME = 'github-pool';
 
-		if (poolExist) {
-			console.log(
-				chalk.yellow(`The Identity Pool for GitHub Action already exists.`)
-			);
-		}
+    console.log('\nCreating a Workload Identity Pool ...');
+    const poolsList = execSync(`gcloud iam workload-identity-pools list --project="${PROJECT_ID}" --location="global" --show-deleted`);
+    const poolExist = poolsList.toString().includes(POOL_NAME);
 
-		if (!poolExist) {
-			execSync(
-				`gcloud iam workload-identity-pools create "${POOL_NAME}" --project="${PROJECT_ID}" --location="global" --display-name="GitHub Action Pool"`,
-				{ stdio: [] }
-			);
-			console.log(chalk.green(`Done!`));
-		}
+    if (poolExist) {
+      console.log(chalk.yellow(`The Identity Pool for GitHub Action already exists.`));
+    }
 
-		const WORKLOAD_IDENTITY_POOL_ID = execSync(
-			`gcloud iam workload-identity-pools describe "${POOL_NAME}" --project="${PROJECT_ID}" --location="global" --format="value(name)"`
-		)
-			.toString()
-			.trim();
+    if (!poolExist) {
+      execSync(`gcloud iam workload-identity-pools create "${POOL_NAME}" --project="${PROJECT_ID}" --location="global" --display-name="GitHub Action Pool"`, { stdio: [] });
+      console.log(chalk.green(`Done!`));
+    }
 
-		const PROVIDER_NAME = 'github-action-provider';
+    const WORKLOAD_IDENTITY_POOL_ID = execSync(`gcloud iam workload-identity-pools describe "${POOL_NAME}" --project="${PROJECT_ID}" --location="global" --format="value(name)"`)
+      .toString()
+      .trim();
 
-		console.log(`\nCreating a Workload Identity Provider in ${POOL_NAME} ...`);
-		const providersList = execSync(
-			`gcloud iam workload-identity-pools providers list --project="${PROJECT_ID}" --workload-identity-pool="${POOL_NAME}" --location="global" --show-deleted`
-		);
-		const providerExist = providersList.toString().includes(PROVIDER_NAME);
+    const PROVIDER_NAME = 'github-action-provider';
 
-		if (providerExist) {
-			console.log(
-				chalk.yellow(
-					`The Provider in ${POOL_NAME} for GitHub Action already exists.`
-				)
-			);
-		}
+    console.log(`\nCreating a Workload Identity Provider in ${POOL_NAME} ...`);
+    const providersList = execSync(
+      `gcloud iam workload-identity-pools providers list --project="${PROJECT_ID}" --workload-identity-pool="${POOL_NAME}" --location="global" --show-deleted`
+    );
+    const providerExist = providersList.toString().includes(PROVIDER_NAME);
 
-		if (!providerExist) {
-			execSync(
-				`gcloud iam workload-identity-pools providers create-oidc "github-action-provider" --project="${PROJECT_ID}" --location="global" --workload-identity-pool="${POOL_NAME}" --display-name="GitHub Action Provider" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" --issuer-uri="https://token.actions.githubusercontent.com"`,
-				{ stdio: [] }
-			);
-			console.log(chalk.green(`Done!`));
-		}
+    if (providerExist) {
+      console.log(chalk.yellow(`The Provider in ${POOL_NAME} for GitHub Action already exists.`));
+    }
 
-		console.log(
-			`\nAllow authentication from GitHub to impersonate the Service Account ...\n`
-		);
+    console.log('\n');
 
-		const REPO_NAME = await input({
-			message: 'Provide the GitHub repository path (orgs/repo or user/repo):',
-		});
+    const REPO_NAME = await input({
+      message: 'Provide the GitHub repository path (orgs/repo or user/repo):',
+    });
 
-		if (!REPO_NAME) {
-			console.log(chalk.red(`Repository information required`));
-			return;
-		}
+    if (!REPO_NAME) {
+      console.log(chalk.red(`Repository information required`));
+      return;
+    }
 
-		const policiesList = execSync(
-			`gcloud iam service-accounts get-iam-policy "${SERVICE_ACCOUNT}" --project="${PROJECT_ID}" --format=json`
-		);
+    if (!providerExist) {
+      const GITHUB_ORG = REPO_NAME.split('/').at(0);
 
-		const userMember = `principalSet://iam.googleapis.com/${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}`;
-		const roleWorkflow = 'roles/iam.workloadIdentityUser';
+      execSync(
+        `gcloud iam workload-identity-pools providers create-oidc "github-action-provider" --project="${PROJECT_ID}" --location="global" --workload-identity-pool="${POOL_NAME}" --display-name="GitHub Action Provider" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" --attribute-condition="assertion.repository_owner=='${GITHUB_ORG}'" --issuer-uri="https://token.actions.githubusercontent.com"`,
+        { stdio: [] }
+      );
+      console.log(chalk.green(`Done!`));
+    }
 
-		const workloadIdentityUsers =
-			JSON.parse(policiesList.toString()).bindings?.find(
-				(policy) => policy.role === roleWorkflow
-			).members || [];
+    console.log(`\nAllow authentication from GitHub to impersonate the Service Account ...\n`);
 
-		const isMemberExist = workloadIdentityUsers.find((user) =>
-			user.includes(
-				`${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}`
-			)
-		)
-			? true
-			: false;
+    const policiesList = execSync(`gcloud iam service-accounts get-iam-policy "${SERVICE_ACCOUNT}" --project="${PROJECT_ID}" --format=json`);
 
-		if (isMemberExist) {
-			console.log(chalk.yellow(`\nAccount already setup to be impersonated.`));
-		}
+    const userMember = `principalSet://iam.googleapis.com/${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}`;
+    const roleWorkflow = 'roles/iam.workloadIdentityUser';
 
-		if (!isMemberExist) {
-			execSync(
-				`gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT}" --project="${PROJECT_ID}" --role=${roleWorkflow} --member=${userMember}`,
-				{ stdio: [] }
-			);
-			console.log(chalk.green(`\nAccount setup completed!`));
-		}
+    const workloadIdentityUsers = JSON.parse(policiesList.toString()).bindings?.find((policy) => policy.role === roleWorkflow).members || [];
 
-		const WORKLOAD_IDENTITY_PROVIDER = execSync(
-			`gcloud iam workload-identity-pools providers describe "${PROVIDER_NAME}" --project="${PROJECT_ID}" --location="global" --workload-identity-pool="${POOL_NAME}" --format="value(name)"`
-		)
-			.toString()
-			.trim();
+    const isMemberExist = workloadIdentityUsers.find((user) => user.includes(`${WORKLOAD_IDENTITY_POOL_ID}/attribute.repository/${REPO_NAME}`)) ? true : false;
 
-		console.log(
-			chalk.green(
-				`\nTo complete, add the following secrets to the ${REPO_NAME} GitHub repository:\n\nname: WORKLOAD_IDENTITY_PROVIDER (depends on your CI system)\nvalue: ${WORKLOAD_IDENTITY_PROVIDER}\n\nname: SERVICE_ACCOUNT (depends on your CI system)\nvalue: ${SERVICE_ACCOUNT}`
-			)
-		);
-	} catch (error) {
-		console.log(chalk.red(`\nAn error occured: ${error.message}`));
-	}
+    if (isMemberExist) {
+      console.log(chalk.yellow(`\nAccount already setup to be impersonated.`));
+    }
+
+    if (!isMemberExist) {
+      execSync(`gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT}" --project="${PROJECT_ID}" --role=${roleWorkflow} --member=${userMember}`, { stdio: [] });
+      console.log(chalk.green(`\nAccount setup completed!`));
+    }
+
+    const WORKLOAD_IDENTITY_PROVIDER = execSync(
+      `gcloud iam workload-identity-pools providers describe "${PROVIDER_NAME}" --project="${PROJECT_ID}" --location="global" --workload-identity-pool="${POOL_NAME}" --format="value(name)"`
+    )
+      .toString()
+      .trim();
+
+    console.log(
+      chalk.green(
+        `\nTo complete, add the following secrets to the ${REPO_NAME} GitHub repository:\n\nname: WORKLOAD_IDENTITY_PROVIDER (depends on your CI system)\nvalue: ${WORKLOAD_IDENTITY_PROVIDER}\n\nname: SERVICE_ACCOUNT (depends on your CI system)\nvalue: ${SERVICE_ACCOUNT}`
+      )
+    );
+  } catch (error) {
+    console.log(chalk.red(`\nAn error occured: ${error.message}`));
+  }
 };
