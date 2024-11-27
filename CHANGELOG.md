@@ -1,3 +1,20 @@
+# [1.26.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.25.0...v1.26.0) (2024-11-27)
+
+
+### Bug Fixes
+
+* **cli:** update to use attribute condition ([927ba88](https://github.com/sws2apps/github-gcloud-cli/commit/927ba88d5ea6d5d084ed27f224019ffa3c0b0a11))
+
+
+### Features
+
+* **deps:** bump @inquirer/confirm from 4.0.1 to 5.0.0 ([beb3981](https://github.com/sws2apps/github-gcloud-cli/commit/beb39811d218c4271e8390d85b92ad69bece72f6))
+* **deps:** bump @inquirer/confirm from 5.0.0 to 5.0.1 ([b930cdf](https://github.com/sws2apps/github-gcloud-cli/commit/b930cdffcb6099b3c7d20d53d5991c9d3771f0cd))
+* **deps:** bump @inquirer/confirm from 5.0.1 to 5.0.2 ([54f7a4b](https://github.com/sws2apps/github-gcloud-cli/commit/54f7a4ba01241eb0ef57b2ae0c10e4e2139314df))
+* **deps:** bump @inquirer/input from 3.0.1 to 4.0.0 ([f1e3a29](https://github.com/sws2apps/github-gcloud-cli/commit/f1e3a2980710561fa28fbd74dd9756e1b8e3b4c5))
+* **deps:** bump @inquirer/input from 4.0.0 to 4.0.1 ([b713724](https://github.com/sws2apps/github-gcloud-cli/commit/b71372473da4c075fcf699cf08dd3c399876f677))
+* **deps:** bump @inquirer/input from 4.0.1 to 4.0.2 ([e7293df](https://github.com/sws2apps/github-gcloud-cli/commit/e7293dffa17131c8fd52cda8efd19787d6bee332))
+
 # [1.25.0](https://github.com/sws2apps/github-gcloud-cli/compare/v1.24.0...v1.25.0) (2024-09-16)
 
 
