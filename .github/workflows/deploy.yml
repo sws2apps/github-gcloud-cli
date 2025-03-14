@@ -29,7 +29,7 @@ jobs:
 
       - name: Semantic Release
         id: semantic
-        uses: cycjimmy/semantic-release-action@b1b432f13acb7768e0c8efdec416d363a57546f2
+        uses: cycjimmy/semantic-release-action@0a51e81a6baff2acad3ee88f4121c589c73d0f0e
         with:
           semantic_version: 19.0.2
         env:
