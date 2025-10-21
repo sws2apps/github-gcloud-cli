@@ -3,7 +3,10 @@ name: CD
 on:
   workflow_dispatch:
 
-permissions: read-all
+permissions:
+  id-token: write
+  contents: read
+
 
 jobs:
   deploy_prod:
@@ -12,9 +15,6 @@ jobs:
     environment:
       name: Prod.env
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
 
     strategy:
       matrix:
@@ -34,4 +34,3 @@ jobs:
           semantic_version: 19.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
