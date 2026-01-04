@@ -14,7 +14,6 @@ jobs:
       name: Prod.env
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       id-token: write
 
     steps:
@@ -22,7 +21,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           ref: main
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Setup Node.js LTS
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
@@ -35,4 +34,4 @@ jobs:
       - name: Run Semantic Release
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
