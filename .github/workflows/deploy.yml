@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
-
 
 jobs:
   deploy_prod:
@@ -15,10 +13,9 @@ jobs:
     environment:
       name: Prod.env
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [22.x]
+    permissions:
+      contents: write
+      id-token: write
 
     steps:
       - name: Checkout for release preparation
@@ -27,10 +24,12 @@ jobs:
           ref: main
           persist-credentials: false
 
-      - name: Semantic Release
-        id: semantic
-        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
         with:
-          semantic_version: 19.0.2
+          node-version: lts/Jod
+
+      - name: Run Semantic Release
+        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
