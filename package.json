@@ -4,7 +4,8 @@
   "type": "module",
   "description": "CLI to setup Workload Identity Federation to Google Cloud for GitHub Actions",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "bin": {
     "github-gcloud": "./index.js"
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/git": "^10.0.1"
+    "@semantic-release/git": "^10.0.1",
+    "semantic-release": "^25.0.2"
   }
 }
