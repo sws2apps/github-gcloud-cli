@@ -36,7 +36,7 @@
     "@inquirer/confirm": "^6.0.1",
     "@inquirer/input": "^5.0.1",
     "chalk": "^5.0.1",
-    "commander": "^14.0.0"
+    "commander": "^15.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",
